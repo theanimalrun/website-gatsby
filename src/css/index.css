@@ -1,0 +1,10 @@
+html,
+body,
+#___gatsby,
+#gatsby-focus-wrapper {
+  height: 100%;
+}
+
+.prose .gatsby-image-wrapper img {
+  margin-top: 0 !important;
+}
