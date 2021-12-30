@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { graphql, useStaticQuery } from 'gatsby';
 import Container from './container';
 import Link from './link';
 
 const Navigation = () => {
   const [menuHidden, setMenuHidden] = React.useState(true);
-  const { contentfulNavigation, site } = useStaticQuery(graphql`
+  const { contentfulNavigation, site, contentfulNavigationLogo } = useStaticQuery(graphql`
     query {
       site {
         siteMetadata {
@@ -27,53 +28,74 @@ const Navigation = () => {
           }
         }
       }
+      contentfulNavigationLogo {
+        contentful_id
+        title
+        logoFile {
+          gatsbyImageData
+          file {
+            url
+          }
+        }
+      }
     }
   `);
 
+console.log(contentfulNavigationLogo.logoFile.gatsbyImageData);
   return (
-    <Container
-      as="nav"
-      className="flex flex-col md:flex-row md:items-center py-5 mb-5 border-b"
-      role="navigation"
-      aria-label="Main"
-    >
-      <div className="flex flex-grow items-center">
-        <button
-          className="mr-4 md:hidden"
-          type="button"
-          onClick={() => setMenuHidden(!menuHidden)}
-        >
-          <svg className="w-6 h-6" viewBox="0 0 100 70">
-            <rect width="100%" height="10"></rect>
-            <rect y="30" width="100%" height="10"></rect>
-            <rect y="60" width="100%" height="10"></rect>
-          </svg>
-        </button>
-        <Link className="flex items-center" to="/">
-          <img
-            className="max-h-8 inline-block mr-2"
-            src="/gatsby-contentful.png"
-            alt="Logo"
-          />
-          {site.siteMetadata.title}
-        </Link>
-      </div>
-      <ul className={`${menuHidden ? 'hidden' : 'mt-6 md:mt-0'} md:block`}>
-        {contentfulNavigation.navigationItems.map((item, i) => (
-          <li
-            key={i}
-            className="block md:inline-block my-2 md:my-0 px-0 md:px-3"
-          >
-            <Link
-              className="block text-blue-600"
-              to={item.slug ? `/${item.slug}` : item.url}
-            >
-              {item.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </Container>
+    <header class="bg-purple mb-4">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
+        <div class="w-full py-6 flex items-center justify-between border-b border-indigo-500 lg:border-none">
+          <div class="flex items-center">
+            <a href="/">
+              {!contentfulNavigationLogo.logoFile.gatsbyImageData ? 
+                <img class="h-10 w-10" src={contentfulNavigationLogo.logoFile.file.url} alt={contentfulNavigationLogo.title} />
+                :
+                <GatsbyImage class="h-10 w-10" image={contentfulNavigationLogo.logoFile.gatsbyImageData} alt={contentfulNavigationLogo.title} />
+              }
+              <span class="font-bold text-white text-3xl tracking-tight leading-relaxed wordmark">Animal Run</span>
+            </a>
+            <div class="hidden ml-10 space-x-8 lg:block">
+              <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Solutions">
+                Solutions
+              </a>
+
+              <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Pricing">
+                Pricing
+              </a>
+
+              <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Docs">
+                Docs
+              </a>
+
+              <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Company">
+                Company
+              </a>
+            </div>
+          </div>
+          <div class="ml-10 space-x-4">
+            <a href="#" class="inline-block bg-white py-2 px-4 border border-transparent rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50">Sign up</a>
+          </div>
+        </div>
+        <div class="py-4 flex flex-wrap justify-center space-x-6 lg:hidden">
+          <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Solutions">
+            Solutions
+          </a>
+
+          <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Pricing">
+            Pricing
+          </a>
+
+          <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Docs">
+            Docs
+          </a>
+
+          <a href="#" class="text-base font-medium text-white hover:text-indigo-50" key="Company">
+            Company
+          </a>
+        </div>
+      </nav>
+    </header>
   );
 };
 
