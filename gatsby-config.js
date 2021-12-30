@@ -16,14 +16,27 @@ if (process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN) {
 
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Contentful Starter',
+    title: 'Animal Run',
   },
   plugins: [
     {
       resolve: 'gatsby-source-contentful',
       options: contentfulConfig,
     },
-    'gatsby-plugin-postcss',
+    {
+      resolve: `gatsby-plugin-postcss`,
+      options: {
+          postCssPlugins: [require("tailwindcss")('./tailwind.config.js')],
+          },
+      },
+      {
+          resolve: `gatsby-plugin-purgecss`,
+          options: {
+              printRejected: false,
+              develop: false,
+              tailwind: true
+          }
+      },
     'gatsby-plugin-image',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sharp',
